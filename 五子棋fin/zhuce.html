@@ -1,0 +1,48 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <script language="javascript" type="text/javascript">
+        //读文件     
+        function readFile(filename) {
+            var fso = new ActiveXObject("Scripting.FileSystemObject");
+            var f = fso.OpenTextFile(filename, 1);
+            var s = "";
+            while (!f.AtEndOfStream) {
+                var txt = f.ReadLine();
+                s += txt + "\n";
+            }
+            f.Close();
+            return s;
+        }
+
+        //写文件--增加行     
+        function writeFile(filename, filecontent1,filecontent2) {
+            var fso, f;
+            fso = new ActiveXObject("Scripting.FileSystemObject");
+            f = fso.OpenTextFile(filename, 8, true);
+            f.WriteLine(filecontent1);
+			f.WriteLine(filecontent2);
+            f.Close();
+            alert('ok');
+        }
+
+
+
+    </script>name
+    <input type="text" id="in2" name="in2" />
+    <br>
+    pass
+    <input type="text" id="in" name="in" />
+    <br>
+    <input type="button" value="get_account" onclick="writeFile('user.txt',document.getElementById('in2').value,document.getElementById('in').value);" />
+    <br>
+    <textarea id="show" name="显示当前全部用户" cols="100" rows="20">     
+</textarea>
+    <input type="button" value="show_all" onclick="document.getElementById('show').value=readFile('user.txt');" />
+<br>
+</body>
+</html>

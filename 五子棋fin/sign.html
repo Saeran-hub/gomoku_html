@@ -1,0 +1,61 @@
+<title>登录</title>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript">
+        function check(){
+var name=document.getElementById("name").value;
+var pass=document.getElementById("pass").value;
+
+            var fso = new ActiveXObject("Scripting.FileSystemObject");
+            var f = fso.OpenTextFile("user.txt", 1);
+
+            var s = "";
+			var s2="";
+            while (!f.AtEndOfStream) {
+                var txt = f.ReadLine();
+				var txt2 = f.ReadLine();		
+                s += txt;
+				s2 +=txt2;
+				if(txt==name&&txt2==pass){
+					alert("账号："+txt+" 登陆成功");
+					            var fso1 = new ActiveXObject("Scripting.FileSystemObject");
+            var f1 = fso1.OpenTextFile("history.txt", 2);
+	
+            var s1 = "";
+			f1.WriteLine(txt);
+            f1.Close();
+					       location.href="五子棋.html";
+						   return s;
+				}
+            }
+            f.Close();
+			alert("无账号或密码错误")
+            return s;
+        }
+    </script>
+    <style type="text/css">
+a{text-decoration:none}
+</style>
+</head>
+<body >
+<th><font size='7' color='black'>五子棋登陆</th></table></center></th><tr>
+<table style="background-image:url();background-size: 80%; opacity: 1; filter: alpha(opacity = 30)"><th >
+
+<form action="form.html" method="post" οnsubmit="return val()" target="_blank">
+<p>&nbsp;</p>
+<table border=0 bgcolor=F0F0F0>
+<tr><th width=12 height=45></th>
+  <th colspan=2 height=45 align='left'>没有帐户？</th></tr>
+         <p><span class="wa">请输入用户账号:</span><span class="word">
+  <INPUT TYPE="text" NAME="" id="name">
+         </span><span class="word1">用户密码:</span>
+           <INPUT TYPE="password" NAME="" id="pass">
+<input type="button" value="登入" onClick="check()">
+    
+<tr><th colspan=3 height=2></th></tr>
+<tr><th width=12 height=40><th width="306"><table width=310 border=0><tr>
+  <th  width=10 height=20 align='left'>&nbsp;</th>
+<th  width=290 height=20 align='center'><font size=2><a href="zhuce.html" target="_blank">注册</a></font></th></tr></table></th><th width="0"></th></tr>
+
+</table>
+</body>

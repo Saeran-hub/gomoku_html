@@ -1,0 +1,253 @@
+<html>
+<head>
+    <meta charset="gb2312" />
+    <title>五子棋</title>
+    <style>
+    body{background:url(timg.jpg);}
+    </style>
+    <script type="text/javascript">
+        function drawpaper() {
+            canvas = document.getElementById("tu");
+            context = canvas.getContext('2d');
+
+            context.fillStyle = "#FFAF60";
+            context.fillRect(0, 0, 650, 650);
+
+            context.fillStyle = "ivory";
+            context.fillRect(50, 50, 550, 550);
+
+            for (var i = 50; i < 650; i += 50) {
+                context.beginPath();
+                context.moveTo(50, i);
+                context.lineTo(600, i);
+                context.closePath();
+                context.stroke();
+
+                context.beginPath();
+                context.moveTo(i, 50);
+                context.lineTo(i, 600);
+                context.closePath();
+                context.stroke();
+            }
+        }
+
+        var
+            imgWhite = new Image();
+        imgWhite.src = "white.jpg";
+
+        var
+        imgBlack = new Image();
+        imgBlack.src = "b.jpg";
+
+        var
+            whiteturn = true;
+        var
+            win = 0;
+
+        Chess = new Array(12);
+        for(var x=0;x<12;x++){
+            Chess[x] = new Array(12);
+            for (var y = 0; y < 12; y++) {
+                Chess[x][y] = 0;//0 表示这个点没有落子
+            }
+        }
+
+        function put(e) {
+
+            canvas = document.getElementById("tu");
+            context = canvas.getContext('2d');
+
+            if (win == 0) {
+                var x = parseInt(e.clientX) - 12;//位移补偿
+                var y = parseInt(e.clientY) - 12;
+
+
+                //计算棋子二维数组位置
+                if ((x > 25) && (x < 624) && (y > 25) && (y < 624)) {
+                    x = parseInt(x / 25);
+                    if ((x % 2) == 0) {
+                        x = 25 * x;
+                    }
+                    else {
+                        x = 25 * (x + 1);
+                    }
+                    y = parseInt(y / 25);
+                    if ((y % 2) == 0) {
+                        y = 25 * y;
+                    }
+                    else {
+                        y = 25 * (y + 1);
+                    }
+
+                    //判断能否下棋并装填
+                    if (whiteturn == true) {
+                        x = x / 50 - 1;
+                        y = y / 50 - 1;
+                        if (Chess[x][y] == 0) {
+                            Chess[x][y] = 1;//白棋下的地方为1
+                            context.drawImage(imgWhite, 50 * (1 + x) - 15, 50 * (1 + y) - 15, 30, 30);
+                            // alert(x + ',' + y);
+                            whiteturn = false;
+                        }
+                        else {
+                            alert("别压棋子");
+                        }
+                    }
+
+                    else {
+                        x = x / 50 - 1;
+                        y = y / 50 - 1;
+                        if (Chess[x][y] == 0) {
+                            Chess[x][y] = 2;//hei棋下的地方为1
+                            context.drawImage(imgBlack, 50 * (1 + x) - 15, 50 * (1 + y) - 15, 30, 30);
+                            whiteturn = true;
+                        }
+                        else {
+                            alert("别压棋子");
+                        }
+
+                        // alert(x + ',' + y);
+                    }
+
+                    //判断胜利
+                    var remember = 0;//计数器，连续5个就可以啦
+                    var zuo;//左右4格边界框,上下4格边界框
+                    var you;
+                    var shang;
+                    var xia;
+                    if ((x - 4) >= 0) {
+                        zuo = x - 4;
+                    }
+                    else {
+                        zuo = 0;
+                    }
+
+                    if ((x + 4) <= 11) {
+                        you = x + 4;
+                    }
+                    else {
+                        you = 11;
+                    }
+
+                    if ((y - 4) >= 0) {
+                        shang = y - 4;
+                    }
+                    else {
+                        shang = 0;
+                    }
+
+                    if ((y + 4) <= 11) {
+                        xia = y + 4;
+                    }
+                    else {
+                        xia = 11;
+                    }
+
+                    if (whiteturn == false) {//用于判断白黑棋子谁在这回合下棋
+                        var checknumber = 1;
+                    }
+                    else {
+                        var checknumber = 2;
+                    }
+                    // alert(zuo+','+you+','+shang+','+xia);
+                    //左右判断
+                    for (var i = zuo; i <= you; i++) {
+                        if (Chess[i][y] == checknumber) {
+                            remember++;
+                        }
+                        else {
+                            remember = 0;
+                        }
+                        if (remember == 5) {
+                            if (checknumber == 1) {
+                                win = 1;
+                                alert("白棋赢");
+                            }
+                            else {
+                                win = 2;
+                                alert("黑棋赢");
+                            }
+                        }
+                    }
+                    //上下判断
+                    for (var i = shang; i <= xia; i++) {
+                        if (Chess[x][i] == checknumber) {
+                            remember++;
+                        }
+                        else {
+                            remember = 0;
+                        }
+                        if (remember == 5) {
+                            if (checknumber == 1) {
+                                win = 1;
+                                alert("白棋赢");
+                            }
+                            else {
+                                win = 2;
+                                alert("黑棋赢");
+                            }
+                        }
+                    }
+                    //左上右下
+                    var j = y-x+zuo;//y-(x-zuo);
+                    for (var i = zuo; i <= you; i++) {
+                        if (Chess[i][j] == checknumber) {
+                            remember++;
+                        }
+                        else {
+                            remember = 0;
+                        }
+                        j++;
+                        if (remember == 5) {
+                            if (checknumber == 1) {
+                                win = 1;
+                                alert("白棋赢");
+                            }
+                            else {
+                                win = 2;
+                                alert("黑棋赢");
+                            }
+                        }
+                    }
+                    //左下到右上
+                    j = y+x-zuo;
+                    for (var i = zuo; i <= you; i++) {
+                        if (Chess[i][j] == checknumber) {
+                            remember++;
+                        }
+                        else {
+                            remember = 0;
+                        }
+                        j--;
+                        if (remember == 5) {
+                            if (checknumber == 1) {
+                                win = 1;
+                                alert("白棋赢");
+                            }
+                            else {
+                                win = 2;
+                                alert("黑棋赢");
+                            }
+                        }
+                    }
+
+                }
+            }
+            else {
+                if (win == 1) {
+                    alert("别下了，白棋已经赢了，还想玩就刷新网页吧");
+                }
+                else{
+                    alert("别下了，黑棋已经赢了，还想玩就刷新网页吧");
+                }
+            }
+    }
+    </script>
+</head>
+<body onLoad="drawpaper()">
+
+    <canvas width="650" id="tu" onMouseDown="put(event)" height="650" style="border:6px solid #c3c3c3"></canvas>
+    <h1 style="text-align:center">五子棋</h1>
+
+</body>
+</html>
